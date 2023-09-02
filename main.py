@@ -1,14 +1,14 @@
 # === Flashcard Program! ===
 import random
 
-
 def show_menu():
-  print(""" == MENU ==
+  print("""     == MENU ==
 1. Create Flashcard
 2. Remove Flashcard
-3. View All Flashcards
-4. Randomize!
-5. Exit
+3. Edit Flashcard
+4. View All Flashcards
+5. Randomize!
+6. Exit
   """)
 
   choice = input("Select an option: ")
@@ -17,18 +17,22 @@ def show_menu():
     choice = input("Select an option: ")
   return choice
 
-def create_card():
+def create_card(): # 1
   
   term = input("\nGreat! What is the term?: ")
   definition = input("What is the definition?: ")
 
   flashcards[term] = definition
-  print(flashcards)
+  print("\n--Updated List--")
+  for key, value in flashcards.items():
+    print("{}- {}".format(key, value))
+  print()
 
   one_more = input("Would you like to make another? (y/n) ")
   one_more = one_more.strip().lower()
 
   if one_more == 'n':
+    print()
     return
     
   elif one_more != 'y': 
@@ -41,12 +45,17 @@ def create_card():
     definition = input("What is the definition?: ")
   
     flashcards[term] = definition
-    print(flashcards)
+    print("--Updated List--")
+    for key, value in flashcards.items():
+      print("{}:{}".format(key, value))
+    print()
 
     one_more = input("Would you like to make another? (y/n) \n")
     one_more = one_more.strip().lower()
+    print()
 
-def remove_card():
+
+def remove_card(): # 2
   if not flashcards:
     print("There are no cards to remove! \n")
   terms = list(flashcards.keys())
@@ -56,20 +65,38 @@ def remove_card():
     removal = input("That term wasn't found. (Try entering term without quotation marks! ")
     
   flashcards.pop(removal)
-  print(flashcards)
+  print(f"Flashcard with the term {removal} has been removed")
 
-def view_cards():
+  print()
+
+def edit_cards(): # 3
+    term = input ("What is the term you would like to edit?  ")
+    while term not in flashcards:
+      print("Sorry but this term does not exist, please check your spelling and try again!")
+      term = input ("What is the term you would like to edit?  ")
+      print()
+    else:
+      new_def = input("Please enter the new defention here: ")
+      flashcards[term] = new_def
+      print("\n--Updated List--")
+      print()
+      for key, value in flashcards.items():
+       print("{}- {}".format(key, value))
+
+       print()
+
+def view_cards(): # 4
   if not flashcards:
     print("You haven't made any flashcards! \n")
   
   print()
   
-  for term in flashcards:
-    print(f"""  {term}: {flashcards[term]}""")
+  for num, term in enumerate(flashcards):
+    print(f"""  {num+1}. {term}- {flashcards[term]}""")
     
   print()
 
-def randomize():
+def randomize(): # 5
   if not flashcards: print("There are no cards to randomize! \n")
 
   terms = list(flashcards.keys())
@@ -113,24 +140,20 @@ def randomize():
       else: 
         print("Please type 'f' to flip or 'quit' to quit \n")
 
-  
   percentage = (points/len(flashcards)) * 100
   print(f"You got {round(percentage, 2)}% correct!\n")
-  
-def exit():
+
+def exit(): # 6
   print("Thank you!")
 
-flashcards = {'hi' : 'hola', 'one': 'uno', 'two' : 'dos'}
+flashcards = {}
 
 while True:
-  menu_choices = {1: create_card, 2: remove_card, 3: view_cards, 4: randomize, 5: exit}
+  menu_choices = {1: create_card, 2: remove_card, 3: edit_cards, 4: view_cards, 5: randomize, 6:exit}
   
   choice = int(show_menu())
   if choice in menu_choices:
     menu_choices[choice]()
-    if choice == 5:
+    if choice == 6:
       break
   else: print("Please enter the number associated with your choice!")
-
-  
-
