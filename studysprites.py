@@ -1,4 +1,5 @@
-# === Flashcard Program! ===
+# === Study Sprites! ===
+from termcolor import colored
 import random
 
 def show_menu():
@@ -13,7 +14,7 @@ def show_menu():
 
   choice = input("Select an option: ")
   while not choice.isnumeric():
-    print("Please enter the number associated with your choice!")
+    print(colored("Please enter the number associated with your choice!", 'red'))
     choice = input("Select an option: ")
   return choice
 
@@ -25,7 +26,7 @@ def create_card(): # 1
   flashcards[term] = definition
   print("\n--Updated List--")
   for key, value in flashcards.items():
-    print("{}- {}".format(key, value))
+    print("{} - {}".format(key, value))
   print()
 
   one_more = input("Would you like to make another? (y/n) ")
@@ -45,9 +46,9 @@ def create_card(): # 1
     definition = input("What is the definition?: ")
   
     flashcards[term] = definition
-    print("--Updated List--")
+    print("\n--Updated List--")
     for key, value in flashcards.items():
-      print("{}:{}".format(key, value))
+      print("{} - {}".format(key, value))
     print()
 
     one_more = input("Would you like to make another? (y/n) \n")
@@ -57,12 +58,16 @@ def create_card(): # 1
 
 def remove_card(): # 2
   if not flashcards:
-    print("There are no cards to remove! \n")
+    print(colored("There are no cards to remove! \n", 'red'))
   terms = list(flashcards.keys())
-  removal = input(f"Which of the following terms would you like to remove?: {terms} ")
+  removal = input(f"Which of the following terms would you like to remove? (Type 'q' to quit): {terms} ")
+  if removal == 'q': return
   
   while removal not in flashcards:
-    removal = input("That term wasn't found. (Try entering term without quotation marks! ")
+    removal = input(colored("That term wasn't found. (Try entering term without quotation marks! ", 'red'))
+    terms = list(flashcards.keys())
+    removal = input(f"Which of the following terms would you like to remove?: {terms} ")
+    if removal == 'q': break
     
   flashcards.pop(removal)
   print(f"Flashcard with the term {removal} has been removed")
@@ -70,20 +75,28 @@ def remove_card(): # 2
   print()
 
 def edit_cards(): # 3
-    term = input ("What is the term you would like to edit?  ")
-    while term not in flashcards:
-      print("Sorry but this term does not exist, please check your spelling and try again!")
-      term = input ("What is the term you would like to edit?  ")
-      print()
-    else:
-      new_def = input("Please enter the new defention here: ")
-      flashcards[term] = new_def
-      print("\n--Updated List--")
-      print()
-      for key, value in flashcards.items():
-       print("{}- {}".format(key, value))
 
-       print()
+  if not flashcards: 
+    print(colored("There are no flashcards to edit! \n", 'red'))
+    return
+
+  print(f"\nTerms: {list(flashcards.keys())}") 
+  term = input("What is the term you would like to edit?  ")
+    
+  
+  while term not in flashcards:
+    print(colored("Sorry but this term does not exist, please check your spelling and try again!", 'red'))
+    term = input ("What is the term you would like to edit?  ")
+    print()
+  else:
+    new_def = input("Please enter the new defention here: ")
+    flashcards[term] = new_def
+    print("\n--Updated List--")
+    print()
+    for key, value in flashcards.items():
+     print("{} - {}".format(key, value))
+
+     print()
 
 def view_cards(): # 4
   if not flashcards:
@@ -92,17 +105,17 @@ def view_cards(): # 4
   print()
   
   for num, term in enumerate(flashcards):
-    print(f"""  {num+1}. {term}- {flashcards[term]}""")
+    print(f"""  {num+1}. {term} - {flashcards[term]}""")
     
   print()
 
 def randomize(): # 5
-  if not flashcards: print("There are no cards to randomize! \n")
+  if not flashcards: print(colored("There are no cards to randomize! \n", 'red'))
 
   terms = list(flashcards.keys())
   random.shuffle(terms)
 
-  print("Random terms will be shown from all of your flashcards. Type 'q' at any point to quit \n")
+  print(colored("Random terms will be shown from all of your flashcards. Type 'q' at any point to quit \n", 'yellow'))
 
   points = 0
   
@@ -123,10 +136,10 @@ def randomize(): # 5
           right_wrong = input("Did you get this term right? (y/n) ")
           if right_wrong == 'y':
             points += 1
-            print(f"{points} correct so far!\n")
+            print(colored(f"{points} correct so far!\n", 'green'))
             break
           elif right_wrong == 'n':
-            print("Try to review this one!\n")
+            print(colored("Try to review this one!\n", 'red'))
             break 
           elif right_wrong == 'quit':
             break
@@ -141,11 +154,13 @@ def randomize(): # 5
         print("Please type 'f' to flip or 'quit' to quit \n")
 
   percentage = (points/len(flashcards)) * 100
-  print(f"You got {round(percentage, 2)}% correct!\n")
+  print(colored(f"You got {round(percentage, 2)}% correct!\n", 'green'))
 
 def exit(): # 6
-  print("Thank you!")
+  print(colored("Thank you!", 'blue'))
 
+print(colored("Welcome to Study Sprites!!\n", 'green'))
+  
 flashcards = {}
 
 while True:
@@ -156,4 +171,4 @@ while True:
     menu_choices[choice]()
     if choice == 6:
       break
-  else: print("Please enter the number associated with your choice!")
+  else: print(colored("Please enter the number associated with your choice!\n", 'red'))
