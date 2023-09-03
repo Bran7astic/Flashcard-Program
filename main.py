@@ -82,12 +82,13 @@ def edit_cards(): # 3
 
   print(f"\nTerms: {list(flashcards.keys())}") 
   term = input("What is the term you would like to edit?  ")
-    
   
   while term not in flashcards:
     print(colored("Sorry but this term does not exist, please check your spelling and try again!", 'red'))
-    term = input ("What is the term you would like to edit?  ")
+    term = input ("What is the term you would like to edit? Type 'q' to quit. ")
     print()
+    if term == 'q': 
+      break
   else:
     new_def = input("Please enter the new defention here: ")
     flashcards[term] = new_def
